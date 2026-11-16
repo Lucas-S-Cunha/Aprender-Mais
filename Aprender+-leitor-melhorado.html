@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aprender+</title><link rel="icon" href="data:,">
+<style>
+:root{--bg:#eef3ff;--cd:#fff;--tx:#0f1f3d;--mu:#6b7a99;--bd:#dfe6f5;--pr:#1769ff;--ok:#16a34a;--er:#ef4444;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1430;--cd:#12214a;--tx:#e8eeff;--mu:#9fb0d6;--bd:#243567;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1430;--cd:#12214a;--tx:#e8eeff;--mu:#9fb0d6;--bd:#243567;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,select,input{font:inherit;color:inherit}select,input{color:var(--tx)}.rc select,.rc input,.rc option{background:#fff;color:#0f1f3d}
+select,input{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:8px;min-width:150px}
+.bt{background:var(--pr);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer}.bt.o{background:none;color:var(--pr);border:1px solid var(--pr)}.bt.r{background:var(--er)}
+.sb{position:fixed;inset:0 auto 0 0;width:210px;background:linear-gradient(#0b1f4b,#08122c);color:#fff;padding:12px 10px;transition:.2s;z-index:5;overflow:hidden}
+.sb.c{width:62px}.sb.c .t{display:none}
+.lg{display:flex;align-items:center;gap:8px;font-weight:700;font-size:21px;cursor:pointer;margin:6px 6px 20px;white-space:nowrap}.lg b{color:#3b8bff}
+.mi{display:flex;gap:12px;align-items:center;padding:10px;border-radius:8px;cursor:pointer;color:#c9d6f5;white-space:nowrap;margin-bottom:4px}.mi.on{background:var(--pr);color:#fff}
+.mn{margin-left:210px;padding:16px 24px;transition:.2s}.sb.c+.mn{margin-left:62px}
+.tp{display:flex;align-items:center;gap:12px;margin-bottom:14px}.tp h2{margin:0;flex:1}
+.hb{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:12px}.g .cd{margin:0}
+.w{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600}
+.fl{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}small,.mu{color:var(--mu)}
+.bar{height:10px;border-radius:5px;background:var(--pr)}.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:11px}.col i{display:block;width:70%;background:var(--pr);border-radius:4px 4px 0 0}
+#ms{color:var(--er);min-height:18px;margin-bottom:6px}
+body.m{background:#0b1a3a;color:#fff}.mw{max-width:480px;margin:auto;padding:24px 16px 100px;text-align:center}
+.nv{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:#0e2250;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.nv div{padding:8px 18px;border-radius:12px;color:#9fb0d6;cursor:pointer}.nv .on{background:var(--pr);color:#fff}
+.rc{background:#fff;color:#0f1f3d;border-radius:16px;padding:14px;text-align:left}.rc td{border-color:#e5eaf5}
+.big{width:100%;border-radius:30px;padding:16px;font-size:18px;margin-top:20px}
+video{background:#000;object-fit:contain;max-width:100%}
+@media(max-width:600px){.mw{padding:18px 12px 100px}.rc{padding:10px}.rc td{padding:7px 5px}}
+#pr{display:none}
+@page{margin:6mm}@media print{body>*:not(#pr){display:none!important}#pr{display:block}.pgx{display:grid;grid-template-columns:repeat(var(--c,2),1fr);break-after:page}.pgx:last-child{break-after:auto}.sh{width:100%;height:auto;display:block;outline:1px dashed #bbb}}
+</style></head><body><div id="app"></div><div id="pr"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const clean=(s,n=60)=>String(s??'').normalize('NFC').replace(/[^\p{L}\p{N} .,\-()\/]/gu,'').replace(/\s+/g,' ').trim().slice(0,n);
+const asc=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^ -~|]/g,'').replace(/\|/g,'');
+const uid=()=>Math.random().toString(36).slice(2,8),D=s=>/^\d{4}-\d{2}-\d{2}$/.test(s)?s:'',ID4=s=>/^\d{4}$/.test(s)?s:'';
+const mob=location.hash=='#mobile'||(location.hash!='#desktop'&&(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||(matchMedia('(pointer:coarse)').matches&&innerWidth<900)));
+function fix(d){d=d||{};const o={teacher:clean(d.teacher,40),classes:[],exams:[],res:[]},L=(a,n)=>Array.isArray(a)?a.slice(0,n):[];
+ for(const c of L(d.classes,200))o.classes.push({id:clean(c.id,12),name:clean(c.name,30),subjects:L(c.subjects,20).map(x=>clean(x,30)).filter(Boolean),students:L(c.students,1000).map(s=>({id:ID4(String(s.id)),name:clean(s.name),birth:D(s.birth)})).filter(s=>s.id&&s.name)});
+ for(const e of L(d.exams,1000))if(/^[ABCDX]{1,30}$/.test(e.key))o.exams.push({id:clean(e.id,12),title:clean(e.title,50),cid:clean(e.cid,12),subj:clean(e.subj,30),date:D(e.date),key:e.key});
+ for(const r of L(d.res,20000))if(/^[ABCDX]{1,30}$/.test(r.k)&&/^[ABCD-]{1,30}$/.test(r.a)&&r.a.length==r.k.length)o.res.push({e:clean(r.e,12),s:ID4(String(r.s||'')),c:clean(r.c,12),n:clean(r.n,30),cl:clean(r.cl,30),t:clean(r.t,30),d:D(r.d),k:r.k,a:r.a});
+ return o}
+function merge(d){if(!S.teacher&&d.teacher)S.teacher=d.teacher;for(const c of d.classes){const x=S.classes.find(y=>y.id==c.id);if(!x)S.classes.push(c);else{x.name=c.name;c.subjects.forEach(m=>x.subjects.includes(m)||x.subjects.push(m));c.students.forEach(s=>x.students.some(t=>t.id==s.id)||x.students.push(s))}}
+ d.exams.forEach(e=>S.exams.some(x=>x.id==e.id)||S.exams.push(e));
+ d.res.forEach(r=>{const ex=S.exams.find(x=>x.id==r.e);if(ex){r.k=ex.key;r.a=r.a.slice(0,ex.key.length).padEnd(ex.key.length,'-')}if(r.s)S.res=S.res.filter(x=>!(x.e==r.e&&x.s==r.s));S.res.push(r)})}
+let S={classes:[],exams:[],res:[],teacher:''};try{S=fix(JSON.parse(localStorage.getItem('apl')))}catch{}if(!S.teacher&&(S.classes.length||S.exams.length||S.res.length))S.teacher='Professor(a)';
+const save=()=>{try{localStorage.setItem('apl',JSON.stringify(S))}catch{}};
+let page='home',cur={c:'',m:''},q='',pp=5,pg=1,fm={n:10,k:[],t:'',d:''},ed=null,arm='',mp='rd',view=null,pend=null,ppg=4;
+const msg=t=>{const m=$('#ms');if(m)m.textContent=t};
+try{const t=localStorage.getItem('th');if(t)document.documentElement.dataset.theme=t}catch{}
+const isDark=()=>(document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))=='dark';
+function setTh(){const t=isDark()?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem('th',t)}catch{}go()}
+const cls=()=>S.classes.find(c=>c.id==cur.c),ready=()=>cur.c&&cur.m;
+const sc=r=>[...r.k].filter((x,i)=>x=='X'||x==r.a[i]).length,gr=r=>sc(r)/r.k.length*10,avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const exs=()=>S.exams.filter(e=>e.cid==cur.c&&e.subj==cur.m),rs=e=>S.res.filter(r=>r.e==e.id);
+const f1=n=>n==null?'—':n.toFixed(1).replace('.',',');
+const sAvg=s=>avg(S.res.filter(r=>r.s==s.id&&exs().some(e=>e.id==r.e)).map(gr));
+const logo=`<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b8bff" stroke-width="2" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>`;
+const pick=()=>`<div class="cd fl"><label>Turma<br><select onchange="cur.c=this.value;cur.m='';pg=1;go()"><option value="">Escolha</option>${S.classes.map(c=>`<option value="${esc(c.id)}"${c.id==cur.c?' selected':''}>${esc(c.name)}</option>`).join('')}</select></label><label>Matéria<br><select ${cur.c?'':'disabled'} onchange="cur.m=this.value;pg=1;go()"><option value="">Escolha</option>${(cls()?.subjects||[]).map(m=>`<option${m==cur.m?' selected':''}>${esc(m)}</option>`).join('')}</select></label></div>`;
+const card=(t,v)=>`<div class="cd"><small>${t}</small><div style="font-size:28px;font-weight:700">${v}</div></div>`;
+const arm2=(k,l,fn)=>`<button class="bt ${arm==k?'r':'o'}" onclick="if(arm=='${k}'){arm='';${fn}}else{arm='${k}'}go()">${arm==k?'Confirmar?':l}</button>`;
+/* ===== desktop ===== */
+const MENU=[['home','⌂','Início'],['prov','✎','Provas e Gabaritos'],['est','▮','Estatísticas'],['tur','☻','Turmas e Alunos'],['cfg','⚙','Configurações']];
+function dView(){const t=MENU.find(m=>m[0]==page)[2];
+ return `<div class="sb${localStorage.getItem('sbc')?' c':''}" id="sb"><div class="lg" onclick="page='home';go()">${logo}<span class="t">Aprender<b>+</b></span></div>${MENU.map(m=>`<div class="mi${m[0]==page?' on':''}" onclick="page='${m[0]}';arm='';ed=null;go()"><span>${m[1]}</span><span class="t">${m[2]}</span></div>`).join('')}</div>
+ <div class="mn"><div class="tp"><button class="hb" onclick="const s=$('#sb').classList.toggle('c');s?localStorage.setItem('sbc',1):localStorage.removeItem('sbc')">☰</button><h2>${t}</h2><span>👤 ${esc(S.teacher)}</span></div><div id="ms"></div>${pendH()}${P[page]()}</div>`}
+const P={
+home(){let b='';if(ready()){const st=cls().students,all=exs().flatMap(rs),dif=st.map(s=>[s,sAvg(s)]).filter(x=>x[1]!=null).sort((a,b)=>a[1]-b[1]).slice(0,5);
+ b=`<div class="g">${card('Total de alunos',st.length)}${card('Nota média da turma',f1(avg(all.map(gr))))}${card('Desempenho médio',all.length?Math.round(avg(all.map(r=>sc(r)/r.k.length))*100)+'%':'—')}</div><div class="cd"><b>Alunos com maior dificuldade</b><table>${dif.map(([s,a])=>`<tr><td>${esc(s.name)}</td><td>${f1(a)}</td></tr>`).join('')||'<tr><td class="mu">Sem resultados ainda.</td></tr>'}</table></div>`}
+ return pick()+b},
+prov(){let b='';if(ready()){b=`<div class="cd"><div class="fl" style="justify-content:space-between"><b>Provas e gabaritos</b><span class="fl"><label class="mu">Gabaritos por página <select style="min-width:90px" onchange="ppg=+this.value;go()"><option value="4"${ppg==4?' selected':''}>4 (compacto)</option><option value="1"${ppg==1?' selected':''}>1 (tamanho cheio)</option></select></label><button class="bt" onclick="fm={n:10,k:[],t:'',d:''};ed='ex';go()">+ Criar gabarito</button></span></div>
+ ${ed=='ex'?`<div class="fl" style="margin:12px 0"><label>Título<br><input id="et" maxlength="50" value="${esc(fm.t)}"></label><label>Data<br><input id="ed" type="date" value="${fm.d}"></label><div><label>Quantidade de questões (1–30)<br><input id="qn" type="number" min="1" max="30" value="${fm.n}" style="min-width:80px" onchange="fm.t=$('#et').value;fm.d=$('#ed').value;fm.n=Math.min(30,Math.max(1,+this.value||1));fm.k.length=fm.n;go()"></label><div class="fl" style="gap:6px;margin-top:6px"><button class="bt o" type="button" onclick="qCount(-5)">− 5</button><button class="bt o" type="button" onclick="qCount(5)">+ 5 questões</button><button class="bt o" type="button" onclick="qCount(1)">+ 1</button></div></div></div><b>${fm.id?'Editar gabarito oficial':'Gabarito oficial'}</b><div class="fl" style="margin:8px 0">${Array.from({length:fm.n},(_,i)=>`<label>${i+1}<br><select style="min-width:56px" onchange="fm.k[${i}]=this.value">${[...'ABCDX'].map(x=>`<option value="${x}"${(fm.k[i]||'A')==x?' selected':''}>${x=='X'?'Anul.':x}</option>`).join('')}</select></label>`).join('')}</div><button class="bt" onclick="saveEx()">Salvar gabarito</button> <button class="bt o" onclick="ed=null;go()">Cancelar</button><p class="mu">Anul. anula a questão: ela vale ponto para todos. Ao editar, os resultados já lidos são recalculados.</p>`:''}
+ <div class="w"><table><tr><th>Prova</th><th>Data</th><th>Nota média</th><th>Faltas</th><th>Ações</th></tr>${exs().map(e=>{const r=rs(e);return `<tr><td>${esc(e.title)}</td><td>${e.date.split('-').reverse().join('/')}</td><td>${f1(avg(r.map(gr)))}</td><td>${Math.max(0,cls().students.length-new Set(r.map(x=>x.s)).size)}</td><td><button class="bt o" onclick="editEx('${e.id}')">Editar</button> <button class="bt o" onclick="pr('${e.id}')">Imprimir</button> ${arm2('e'+e.id,'Excluir',`S.exams=S.exams.filter(x=>x.id!='${e.id}');S.res=S.res.filter(x=>x.e!='${e.id}');save()`)}</td></tr>`}).join('')||'<tr><td colspan="5" class="mu">Nenhum gabarito criado.</td></tr>'}</table></div></div>`}
+ return pick()+b},
+est(){let b='';if(ready()){const E=exs(),all=E.flatMap(rs),last=[...E].reverse().find(e=>rs(e).length);
+ b=`<div class="g">${card('Total de alunos',cls().students.length)}${card('Nota média',f1(avg(all.map(gr))))}${card('Desempenho',all.length?Math.round(avg(all.map(r=>sc(r)/r.k.length))*100)+'%':'—')}</div>
+ <div class="cd"><b>Nota média por gabarito</b>${E.map(e=>{const a=avg(rs(e).map(gr));return `<div style="margin:8px 0">${esc(e.title)} <small>${f1(a)}</small><div class="bar" style="width:${(a||0)*10}%"></div></div>`}).join('')||'<p class="mu">Sem gabaritos.</p>'}</div>
+ ${last?`<div class="cd"><b>Taxa de erro por questão — ${esc(last.title)}</b><div class="fl" style="align-items:flex-end;height:150px;flex-wrap:nowrap;gap:4px;margin-top:10px">${[...last.key].map((k,i)=>{const r=rs(last),p=k=='X'?0:Math.round(r.filter(x=>x.a[i]!=k).length/r.length*100);return `<div class="col" style="height:100%"><i style="height:${p*1.2}px;${p>=40?'background:var(--er)':''}"></i>${i+1}<small>${p}%</small></div>`}).join('')}</div></div>`:''}`}
+ return pick()+b},
+tur(){let b='';const c=cls();if(ready()){const e=ed&&c.students.find(s=>s.id==ed);
+ b=`<div class="cd"><b>${e?'Editar aluno':'Adicionar aluno'}</b><div class="fl" style="margin-top:8px"><input id="sn" maxlength="60" placeholder="Nome completo" value="${e?esc(e.name):''}"><input id="sb" type="date" value="${e?e.birth:''}"><button class="bt" onclick="saveSt()">${e?'Salvar':'+ Adicionar aluno'}</button></div></div>
+ <div class="cd"><div class="fl"><input placeholder="Pesquisar aluno pelo nome..." value="${esc(q)}" oninput="q=clean(this.value);pg=1;$('#tb').innerHTML=stT()"><label>Por página <select style="min-width:70px" onchange="pp=+this.value;pg=1;$('#tb').innerHTML=stT()">${[5,10,25,50].map(n=>`<option${n==pp?' selected':''}>${n}</option>`).join('')}</select></label>${arm2('c','Excluir turma',`S.classes=S.classes.filter(x=>x.id!='${c.id}');S.exams=S.exams.filter(x=>x.cid!='${c.id}');cur={c:'',m:''};save()`)}</div><div id="tb" class="w">${stT()}</div></div>`}
+ return `<div class="cd"><b>Nova turma</b><div class="fl" style="margin-top:8px"><input id="cn" maxlength="30" placeholder="Ex.: 1º Ano A"><input id="cs" maxlength="120" placeholder="Matérias separadas por vírgula" style="min-width:260px"><button class="bt" onclick="addCl()">+ Criar turma</button></div></div>`+pick()+b},
+cfg(){return `<div class="cd"><b>Professor(a)</b><p class="mu">Este nome é gravado no ZIP e aparece no canto superior direito.</p><div class="fl"><input id="tn" maxlength="40" value="${esc(S.teacher)}"><button class="bt" onclick="setT()">Salvar nome</button></div></div><div class="cd"><b>Aparência</b><p class="mu">Alterne entre o tema claro e o escuro.</p><button class="bt" onclick="setTh()">Mudar para tema ${isDark()?'claro':'escuro'}</button></div><div class="cd"><b>Arquivo de sincronização (ZIP)</b><p class="mu">Tudo fica salvo no navegador até você exportar. Ao importar, o app identifica o tipo: um ZIP de leitura de gabaritos (do celular) apenas adiciona os resultados; um ZIP com todas as informações pede confirmação e substitui os dados atuais.</p><div class="fl"><button class="bt" onclick="exp(1)">Exportar ZIP</button><label class="bt o">Importar ZIP<input type="file" accept=".zip" hidden onchange="imp(this.files[0]);this.value=''"></label>${arm2('x','Apagar tudo','wipe()')}</div></div>`}};
+function stT(){const c=cls(),f=c.students.filter(s=>asc(s.name).toLowerCase().includes(asc(q).toLowerCase())),n=Math.max(1,Math.ceil(f.length/pp));pg=Math.min(pg,n);
+ return `<table><tr><th>Aluno</th><th>Nascimento</th><th>Matrícula</th><th>Nota média</th><th>Ações</th></tr>${f.slice((pg-1)*pp,pg*pp).map(s=>`<tr><td>${esc(s.name)}</td><td>${s.birth.split('-').reverse().join('/')}</td><td>${s.id}</td><td>${f1(sAvg(s))}</td><td><button class="bt o" onclick="ed='${s.id}';go()">Editar</button> ${arm2('s'+s.id,'Excluir',`cls().students=cls().students.filter(x=>x.id!='${s.id}');save()`)}</td></tr>`).join('')}</table><p class="mu">Mostrando ${f.length?(pg-1)*pp+1:0}–${Math.min(pg*pp,f.length)} de ${f.length} <button class="bt o" onclick="pg=Math.max(1,pg-1);$('#tb').innerHTML=stT()">‹</button> ${pg}/${n} <button class="bt o" onclick="pg=Math.min(${n},pg+1);$('#tb').innerHTML=stT()">›</button></p>`}
+function addCl(){const n=clean($('#cn').value,30),m=[...new Set($('#cs').value.split(',').map(x=>clean(x,30)).filter(Boolean))].slice(0,20);if(!n||!m.length)return msg('Informe o nome da turma e ao menos uma matéria (somente letras, números e . , - ( ) /).');const c={id:uid(),name:n,subjects:m,students:[]};S.classes.push(c);cur={c:c.id,m:''};save();go()}
+function saveSt(){const name=clean($('#sn').value),birth=D($('#sb').value);if(!name)return msg('Informe o nome do aluno (caracteres especiais são removidos).');const c=cls();
+ if(ed){const s=c.students.find(x=>x.id==ed);s.name=name;s.birth=birth;ed=null}else{const n=Math.max(0,...S.classes.flatMap(x=>x.students).map(s=>+s.id))+1;if(n>9999)return msg('Limite de matrículas atingido.');c.students.push({id:String(n).padStart(4,'0'),name,birth})}save();go()}
+function qCount(delta){fm.t=$('#et').value;fm.d=$('#ed').value;fm.n=Math.min(30,Math.max(1,fm.n+delta));fm.k.length=fm.n;go()}
+function saveEx(){const title=clean($('#et').value,50),date=D($('#ed').value);if(!title||!date)return msg('Informe título e data válidos.');const key=Array.from({length:fm.n},(_,i)=>fm.k[i]||'A').join('');
+ if(fm.id){const e=S.exams.find(x=>x.id==fm.id);Object.assign(e,{title,date,key});S.res.filter(r=>r.e==e.id).forEach(r=>{r.k=key;r.a=r.a.slice(0,key.length).padEnd(key.length,'-')})}else S.exams.push({id:uid(),title,cid:cur.c,subj:cur.m,date,key});ed=null;fm={n:10,k:[],t:'',d:''};save();go()}
+function editEx(id){const e=S.exams.find(x=>x.id==id);fm={n:e.key.length,k:[...e.key],t:e.title,d:e.date,id};ed='ex';go()}
+/* ===== gabarito impresso / leitura (geometria compartilhada) ===== */
+const XS=[[149,215,280,345],[503,562,620,678]],IX=[815,872,930,988],QX=804,QY=1030,QZ=200,by=i=>381+(i%15)*62.07,iy=d=>381+d*60.1;
+function sheet(e,st){const cl=S.classes.find(c=>c.id==e.cid);
+ const qr=qrcode(0,'L');qr.addData(['A+',e.id,cl.id,st?st.id:'',e.key,asc((st?st.name:'').slice(0,28)),asc(cl.name),asc(e.subj),e.date].join('|'));qr.make();const n=qr.getModuleCount(),m=QZ/n;let d='';for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(qr.isDark(r,c))d+=`M${(QX+c*m).toFixed(2)} ${(QY+r*m).toFixed(2)}h${m.toFixed(2)}v${m.toFixed(2)}h${-m.toFixed(2)}z`;
+ let o=`<svg class="sh" viewBox="0 0 1088 1450" xmlns="http://www.w3.org/2000/svg" font-family="Arial,sans-serif" fill="#000"><rect width="1088" height="1450" fill="#fff"/>`;
+ for(const[x,y]of[[25,25],[1020,25],[25,1340],[1020,1340]])o+=`<rect x="${x}" y="${y}" width="40" height="40"/>`;
+ o+=`<text x="544" y="95" font-size="50" text-anchor="middle">${esc(st?st.name:'')}</text><rect x="48" y="140" width="990" height="135" fill="none" stroke="#000" stroke-width="8"/><rect x="48" y="337" width="670" height="960" fill="none" stroke="#000" stroke-width="6"/><rect x="773" y="337" width="262" height="960" fill="none" stroke="#000" stroke-width="6"/><rect x="783" y="980" width="242" height="305" fill="none" stroke="#000" stroke-width="4"/><path d="${d}"/>`;
+ for(let i=0;i<30;i++){const c=i<15?0:1,y=by(i),dim=i>=e.key.length?' opacity=".25"':'';o+=`<text x="${c?428:80}" y="${y+10}" font-size="30" font-weight="700" text-anchor="middle"${dim}>${i+1}</text>`+XS[c].map((x,j)=>`<g${dim}><circle cx="${x}" cy="${y}" r="17" fill="#fff" stroke="#000" stroke-width="3"/><text x="${x}" y="${y+8}" font-size="22" text-anchor="middle" fill="#777">${'abcd'[j]}</text></g>`).join('')}
+ for(let k=0;k<4;k++)for(let g=0;g<10;g++){const f=st&&st.id[k]==g;o+=`<circle cx="${IX[k]}" cy="${iy(g)}" r="14" fill="${f?'#000':'#fff'}" stroke="#000" stroke-width="3"/><text x="${IX[k]}" y="${iy(g)+7}" font-size="19" text-anchor="middle" fill="${f?'#fff':'#777'}">${g}</text>`}
+ return o+'</svg>'}
+function pr(id){const e=S.exams.find(x=>x.id==id),c=S.classes.find(x=>x.id==e.cid);if(!c.students.length)return msg('A turma não tem alunos.');const Q=[...c.students.map(s=>sheet(e,s)),sheet(e),sheet(e),sheet(e)];let h='';for(let i=0;i<Q.length;i+=ppg)h+=`<div class="pgx" style="--c:${ppg>1?2:1}">${Q.slice(i,i+ppg).join('')}</div>`;$('#pr').innerHTML=h;setTimeout(()=>window.print(),100)}
+function hom(S0,D0){const N=Array.from({length:8},()=>Array(9).fill(0)),c=1e3;S0.forEach(([x,y],i)=>{x/=c;y/=c;const u=D0[i][0]/c,v=D0[i][1]/c;for(const[r,t]of[[[x,y,1,0,0,0,-u*x,-u*y],u],[[0,0,0,x,y,1,-v*x,-v*y],v]]){for(let a=0;a<8;a++){for(let b=0;b<8;b++)N[a][b]+=r[a]*r[b];N[a][8]+=r[a]*t}}});
+ for(let i=0;i<8;i++){let m=i;for(let r=i+1;r<8;r++)if(Math.abs(N[r][i])>Math.abs(N[m][i]))m=r;[N[i],N[m]]=[N[m],N[i]];if(Math.abs(N[i][i])<1e-12)return null;for(let r=0;r<8;r++)if(r!=i){const f=N[r][i]/N[i][i];for(let q=i;q<9;q++)N[r][q]-=f*N[i][q]}}
+ const h=N.map((r,i)=>r[8]/r[i]);return[h[0],h[1],h[2]*c,h[3],h[4],h[5]*c,h[6]/c,h[7]/c]}
+const ap=(h,x,y)=>{const w=h[6]*x+h[7]*y+1;return[(h[0]*x+h[1]*y+h[2])/w,(h[3]*x+h[4]*y+h[5])/w]};
+/* 1) QR -> homografia aproximada; 2) acha os 4 marcadores pretos dos cantos e refaz a homografia (corrige inclinação); 3) mede o preenchimento de cada bolha em relação ao papel ao redor */
+function omr(img,L,n){const g=(X,Y)=>{X|=0;Y|=0;if(X<0||Y<0||X>=img.width||Y>=img.height)return null;const i=(Y*img.width+X)*4;return img.data[i]*.3+img.data[i+1]*.59+img.data[i+2]*.11},T=[L.topLeftCorner,L.topRightCorner,L.bottomLeftCorner,L.bottomRightCorner];
+ const h0=hom([[QX,QY],[QX+QZ,QY],[QX,QY+QZ],[QX+QZ,QY+QZ]],T.map(p=>[p.x,p.y]));if(!h0)return{k:0};const k=Math.hypot(T[1].x-T[0].x,T[1].y-T[0].y)/QZ;let h=h0;
+ const win=(cx,cy,R)=>{const a=[],r=R*k;for(let y=-r;y<=r;y+=2)for(let x=-r;x<=r;x+=2){const v=g(cx+x,cy+y);if(v!=null)a.push([x,y,v])}return a};
+ const F=[[45,45],[1040,45],[45,1360],[1040,1360]],fp=F.map(([x,y])=>{let[cx,cy]=ap(h0,x,y),t=0;for(const R of[50,34,26]){const a=win(cx,cy,R);if(a.length<50)return null;const s=a.map(p=>p[2]).sort((p,q)=>p-q),lo=s[a.length*.05|0],hi=s[a.length*.95|0];if(hi-lo<50)return null;t=(lo+hi)/2;let sx=0,sy=0,c=0;for(const p of a)if(p[2]<t){sx+=p[0];sy+=p[1];c++}if(c<20)return null;cx+=sx/c;cy+=sy/c}
+  const b=win(cx,cy,14);return b.length&&b.filter(p=>p[2]<t).length>=b.length*.8?[cx,cy]:null});
+ if(fp.every(Boolean)){const h1=hom(F,fp);if(h1){const[a,b]=ap(h1,QX,QY);if(Math.hypot(a-T[0].x,b-T[0].y)<30*k)h=h1}}
+ const dk=(x,y,r)=>{let a=0,na=0,b=0,nb=0;for(let u=-2*r;u<=2*r;u+=2.5)for(let v=-2*r;v<=2*r;v+=2.5){const d=Math.hypot(u,v);if(d>2*r||(d>.7*r&&d<1.5*r))continue;const p=ap(h,x+u,y+v),q=g(p[0],p[1]);if(q==null)continue;if(d<=.7*r){a+=q;na++}else{b+=q;nb++}}return na&&nb?Math.max(0,1-a/na/(b/nb)):0};
+ const md=a=>[...a].sort((p,q)=>p-q)[a.length>>1],dec=(v,base)=>{const o=[...v.keys()].sort((p,q)=>v[q]-v[p]),b=v[o[0]]-base,s=v[o[1]]-base;return b<.12||(s>.12&&b-s<.065)?-1:o[0]};
+ const V=[];for(let i=0;i<n;i++)V.push(XS[i<15?0:1].map(x=>dk(x,by(i),17)));let a='',id='';const b1=md(V.flat());for(const v of V){const j=dec(v,b1);a+=j<0?'-':'ABCD'[j]}
+ const W=[];for(let c=0;c<4;c++)W.push([...Array(10).keys()].map(d=>dk(IX[c],iy(d),14)));const b2=md(W.flat());for(const w of W){const j=dec(w,b2);id+=j<0?'?':j}
+ return{a,id,k}}
+const welcome=()=>`<div class="mw" style="margin-top:40px"><div>${logo.replace('width="28" height="28"','width="80" height="80"')}</div><h1 style="margin:6px 0">Bem-vindo!</h1><p class="mu">Comece uma sessão nova ou continue a partir de um arquivo ZIP.</p><div class="cd" style="text-align:left;color:var(--tx)"><b>Criar nova sessão</b><br><input id="tn" maxlength="40" placeholder="Nome do professor(a)" style="width:100%;margin:8px 0"><button class="bt big" style="margin:0" onclick="newSes()">Criar nova sessão</button></div><div class="cd" style="text-align:left;color:var(--tx)"><b>Abrir ZIP existente</b><p class="mu">Carrega as turmas, gabaritos e o nome do professor(a) gravados no arquivo.</p><label class="bt o big" style="display:block;margin:0;cursor:pointer">Escolher arquivo ZIP<input type="file" accept=".zip" hidden onchange="imp(this.files[0],1);this.value=''"></label></div><div id="ms"></div></div>`;
+function newSes(){const n=clean($('#tn').value,40);if(!n)return msg('Informe o nome do professor(a).');S.teacher=n;save();go()}
+function setT(){const n=clean($('#tn').value,40);if(!n)return msg('Informe um nome válido.');S.teacher=n;save();go()}
+function wipe(){S={classes:[],exams:[],res:[],teacher:''};cur={c:'',m:''};save()}
+let mn={e:'',s:'',a:[]};
+function mnV(){const ex=S.exams.find(x=>x.id==mn.e),c=ex&&S.classes.find(x=>x.id==ex.cid),st=c?[...c.students].sort((a,b)=>a.name.localeCompare(b.name)):[];
+ return `<div class="mw"><h3>Inserir respostas</h3><div class="rc">${S.exams.length?`<label>Prova<br><select style="width:100%" onchange="mn={e:this.value,s:'',a:[]};go()"><option value="">Escolha</option>${S.exams.map(e=>`<option value="${esc(e.id)}"${e.id==mn.e?' selected':''}>${esc(e.title)} — ${esc((S.classes.find(c=>c.id==e.cid)||{}).name||'')}</option>`).join('')}</select></label>`:'<p>Nenhuma prova neste aparelho. Importe o ZIP completo do computador em Importar/Exportar.</p>'}
+ ${c?`<p><label>Aluno<br><select style="width:100%" onchange="mn.s=this.value;go()"><option value="">Escolha</option>${st.map(x=>`<option value="${x.id}"${x.id==mn.s?' selected':''}>${esc(x.name)} (${x.id})</option>`).join('')}</select></label></p>`:''}
+ ${ex&&mn.s?`<table>${[...ex.key].map((k,i)=>`<tr><td><b>${i+1}</b></td><td>${k=='X'?'Anulada':[...'ABCD'].map(l=>`<button class="bt ${mn.a[i]==l?'':'o'}" style="padding:6px 12px;margin:2px" onclick="mset(${i},'${l}')">${l}</button>`).join('')}</td></tr>`).join('')}</table><button class="bt big" onclick="mnSave()">Salvar respostas</button>`:''}
+ <button class="bt o big" onclick="mp='rd';go()">Voltar</button><div id="ms"></div></div></div>`+nav()}
+function mset(i,l){mn.a[i]=mn.a[i]==l?'':l;go()}
+function mnSave(){const ex=S.exams.find(x=>x.id==mn.e),c=S.classes.find(x=>x.id==ex.cid),t=c.students.find(x=>x.id==mn.s);if(!t)return msg('Escolha o aluno.');
+ const a=[...ex.key].map((k,i)=>mn.a[i]||'-').join(''),x=fix({res:[{e:ex.id,s:t.id,c:c.id,n:t.name,cl:c.name,t:ex.subj,d:ex.date,k:ex.key,a}]});if(!x.res[0])return msg('Dados inválidos.');merge(x);save();view=x.res[0];mp='rd';go()}
+function cyc(i){const o='ABCD-',a=[...view.a];a[i]=o[(o.indexOf(a[i])+1)%5];view.a=a.join('');save();go()}
+/* ===== arquivo ZIP ===== */
+async function exp(all){try{const z=new JSZip();z.file('aprender.json',JSON.stringify(all?{type:'full',...S}:{type:'res',teacher:S.teacher,res:S.res}));const b=await z.generateAsync({type:'blob',compression:'DEFLATE'}),name='aprender_'+(asc(S.teacher).replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'')||'sessao')+'_'+new Date().toISOString().slice(0,10)+'.zip';
+ {const dl=window.claude?await claude.use('downloads'):null;if(dl)await dl.save({filename:name,data:b});else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}}msg('')}catch(e){if(!e||e.name!='AbortError')msg('Não foi possível salvar o arquivo.')}}
+async function imp(f,w){if(!f)return;try{const z=await JSZip.loadAsync(f),j=JSON.parse(await z.file('aprender.json').async('string')),d=fix(j),full=j.type?j.type=='full':(d.classes.length||d.exams.length);
+ if(w){if(!full)return msg('Este ZIP só tem leituras de gabaritos. Abra o ZIP completo (todas as informações) para iniciar.');S=d;S.teacher=S.teacher||'Professor(a)';save();go()}else if(full){pend=d;go()}else{merge(d);save();go();msg('Leitura de gabaritos importada: '+d.res.length+' resultado(s).')}}catch{msg('Arquivo inválido ou corrompido.')}}
+const pendH=()=>pend?`<div class="cd" style="border-color:var(--er)"><b>Importar todas as informações do aplicativo?</b><p>O arquivo contém ${pend.classes.length} turma(s), ${pend.classes.reduce((n,c)=>n+c.students.length,0)} aluno(s), ${pend.exams.length} gabarito(s) e ${pend.res.length} resultado(s). Importar vai <b>apagar todos os dados atuais</b> e substituí-los pelos do arquivo.</p><button class="bt r" onclick="S=pend;S.teacher=S.teacher||'Professor(a)';pend=null;cur={c:'',m:''};save();go();msg('Dados importados.')">Importar e apagar dados atuais</button> <button class="bt o" onclick="pend=null;go()">Cancelar</button></div>`:'';
+/* ===== celular ===== */
+let strm,tm;const stop=()=>{clearInterval(tm);strm&&strm.getTracks().forEach(t=>t.stop());strm=null};
+async function cam(){
+ const r=$('#rd');
+ r.innerHTML=`<video id="v" autoplay playsinline muted style="width:100%;border-radius:14px;background:#000;max-height:68vh;object-fit:contain"></video><p id="st">Iniciando câmera…</p><p class="mu">Enquadre a folha inteira, mantenha o QR code visível e evite sombras.</p><button class="bt big" style="margin-top:12px" onclick="stop();mn={e:'',s:'',a:[]};mp='mn';go()">Inserir manualmente</button><button class="bt o big" style="color:#fff;border-color:#fff" onclick="stop();go()">Cancelar</button>`;
+ if(!navigator.mediaDevices?.getUserMedia){r.innerHTML='<p>Este navegador não permite acesso à câmera. Abra o site por HTTPS ou localhost, ou use uma foto.</p><label class="bt big" style="display:block">Escolher foto<input type="file" accept="image/*" capture="environment" hidden onchange="photo(this.files[0])"></label><button class="bt o big" onclick="go()">Voltar</button>';return}
+ try{
+  strm=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1440}}});
+ }catch(err){
+  r.innerHTML=`<p>Não foi possível abrir a câmera (${esc(err?.name||'erro')}). Verifique a permissão da câmera e abra o site por HTTPS ou localhost.</p><label class="bt big" style="display:block">Ler por foto<input type="file" accept="image/*" capture="environment" hidden onchange="photo(this.files[0])"></label><button class="bt o big" onclick="mn={e:'',s:'',a:[]};mp='mn';go()">Inserir manualmente</button><button class="bt o big" onclick="go()">Voltar</button>`;return;
+ }
+ const v=$('#v');v.srcObject=strm;
+ try{await v.play()}catch{}
+ const track=strm.getVideoTracks()[0];
+ try{const caps=track.getCapabilities?.();if(caps?.focusMode?.includes('continuous'))await track.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch{}
+ const full=document.createElement('canvas'),fc=full.getContext('2d',{willReadFrequently:true});
+ const scan=document.createElement('canvas'),scx=scan.getContext('2d',{willReadFrequently:true});
+ let last='',hits=0,busy=false,lastScan=0;
+ const tick=now=>{
+  if(!strm)return;
+  requestAnimationFrame(tick);
+  if(busy||!v.videoWidth||now-lastScan<180)return;
+  lastScan=now;busy=true;
+  try{
+   const w=v.videoWidth,h=v.videoHeight;full.width=w;full.height=h;fc.drawImage(v,0,0,w,h);
+   const scale=Math.min(1,1600/Math.max(w,h));scan.width=Math.round(w*scale);scan.height=Math.round(h*scale);scx.drawImage(v,0,0,scan.width,scan.height);
+   const data=scx.getImageData(0,0,scan.width,scan.height);
+   let c=jsQR(data.data,data.width,data.height,{inversionAttempts:'attemptBoth'}),coordScale=scale;
+   // Se o QR estiver pequeno ou desfocado na prévia, tenta novamente na resolução nativa.
+   if(!c||!c.data.startsWith('A+|')){const raw=fc.getImageData(0,0,w,h);c=jsQR(raw.data,w,h,{inversionAttempts:'attemptBoth'});coordScale=1}
+   if(!c||!c.data.startsWith('A+|')){hits=0;last='';const st=$('#st');if(st)st.textContent='QR não identificado. Enquadre a folha inteira, aproxime um pouco e evite reflexos.';return}
+   hits=c.data===last?hits+1:1;last=c.data;
+   const st=$('#st');if(st)st.textContent='QR identificado. Mantendo a folha estável para corrigir…';
+   if(hits<2)return;
+   const loc={};for(const k of ['topLeftCorner','topRightCorner','bottomLeftCorner','bottomRightCorner'])loc[k]={x:c.location[k].x/coordScale,y:c.location[k].y/coordScale};
+   const m=fin(fc.getImageData(0,0,w,h),{data:c.data,location:loc});
+   if(m){if(st)st.textContent=m;hits=0;return}
+   stop();go();
+  }catch(err){const st=$('#st');if(st)st.textContent='Erro no processamento: '+(err?.message||err?.name||'falha desconhecida')+'. Tente enquadrar novamente.';hits=0}
+  finally{busy=false}
+ };
+ requestAnimationFrame(tick);
+}
+let canSh=false;try{canSh=!!(navigator.canShare&&navigator.canShare({files:[new File(['x'],'a.zip',{type:'application/zip'})]}))}catch{}
+function fin(im,c){const p=c.data.split('|');if(p.length<9||!p[1]||!p[2]||!/^[ABCDX]{1,30}$/.test(p[4]))return 'QR code inválido ou incompatível';const o=omr(im,c.location,p[4].length);if(o.k<.25)return 'QR lido, mas a folha não está alinhada. Afaste um pouco e enquadre os quatro cantos.';const sid=p[3]&&/^\d{4}$/.test(p[3])?p[3]:ID4(o.id);if(!sid)return 'Não consegui identificar o aluno. Confira as marcações do ID e tente novamente.';const x=fix({res:[{e:p[1],s:sid,c:p[2],n:p[5],cl:p[6],t:p[7],d:p[8],k:p[4],a:o.a}]});if(!x.res[0])return 'Leitura inválida. Confira o QR code e tente novamente.';merge(x);save();view=x.res[0];mp='rd';if(navigator.vibrate)navigator.vibrate(80);return ''}
+function photo(f){if(!f)return;const im=new Image();im.onload=()=>{const k=Math.min(1,4000/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(im,0,0,cv.width,cv.height);const d=cx.getImageData(0,0,cv.width,cv.height);let c=jsQR(d.data,d.width,d.height,{inversionAttempts:'attemptBoth'});if(!c||!c.data.startsWith('A+|')){const raw=document.createElement('canvas');raw.width=im.width;raw.height=im.height;const rx=raw.getContext('2d',{willReadFrequently:true});rx.drawImage(im,0,0);const rd=rx.getImageData(0,0,raw.width,raw.height);c=jsQR(rd.data,rd.width,rd.height,{inversionAttempts:'attemptBoth'});if(c&&c.data.startsWith('A+|')){const loc={};for(const key of ['topLeftCorner','topRightCorner','bottomLeftCorner','bottomRightCorner'])loc[key]={x:c.location[key].x,y:c.location[key].y};const m=fin(rd,{data:c.data,location:loc});if(m)$('#st').textContent=m;else go();return}}if(!c||!c.data.startsWith('A+|')){$('#st').textContent='QR não encontrado. Enquadre a folha inteira e evite reflexos.';return}const loc={};for(const key of ['topLeftCorner','topRightCorner','bottomLeftCorner','bottomRightCorner'])loc[key]={x:c.location[key].x/k,y:c.location[key].y/k};const m=fin(d,{data:c.data,location:loc});if(m)$('#st').textContent=m;else go()};im.onerror=()=>$('#st').textContent='Não foi possível abrir a imagem.';im.src=URL.createObjectURL(f)}
+function mView(){if(view&&mp=='rd'){const r=view,s=sc(r),n=r.k.length,e=[...r.a].filter((x,i)=>x=='-'&&r.k[i]!='X').length,w=n-s-e,wrong=[...r.k].map((k,i)=>({i,k,a:r.a[i]})).filter(x=>x.k!='X'&&x.a!='-'&&x.a!=x.k),blank=[...r.k].map((k,i)=>({i,k,a:r.a[i]})).filter(x=>x.k!='X'&&x.a=='-');
+  return `<div class="mw"><h3>Resultado da Prova</h3><div class="rc"><div style="background:#e8f8ee;border-radius:12px;padding:12px;text-align:center"><div style="font-size:30px;font-weight:700">${s} de ${n}</div><b style="color:var(--ok)">${Math.round(s/n*100)}% de acertos</b></div><table><tr><td>Acertos</td><td><b style="color:var(--ok)">${s}</b></td><td>Erros</td><td><b style="color:var(--er)">${w}</b></td></tr><tr><td>Não respondidas</td><td colspan="3"><b>${e}</b></td></tr></table><section style="text-align:left;border:1px solid #e5eaf5;border-radius:12px;padding:10px;margin:10px 0"><b>Questões para revisar</b><p style="color:var(--er);margin:7px 0"><b>Erradas (${wrong.length}):</b> ${wrong.length?wrong.map(x=>x.i+1).join(', '):'Nenhuma'}</p><p style="color:#78849b;margin:7px 0"><b>Em branco (${blank.length}):</b> ${blank.length?blank.map(x=>x.i+1).join(', '):'Nenhuma'}</p><button class="bt o" style="width:100%" onclick="mp='gb';go()">Conferir correção questão por questão</button></section><button class="bt big" style="margin:6px 0" onclick="view=null;mp='rd';go();cam()">Ler próximo</button><b>Detalhes da prova</b><table>${[['Nome completo',r.n||'—'],['ID',r.s||'não lido'],['Matéria',r.t],['Turma',r.cl],['Data',r.d.split('-').reverse().join('/')]].map(x=>`<tr><td>${x[0]}</td><td style="text-align:right">${esc(x[1])}</td></tr>`).join('')}</table></div></div>`+nav()}
+ if(mp=='gb'&&view)return `<div class="mw"><h3>Gabarito</h3><div class="rc"><table><tr><th>Questão</th><th>Correta</th><th>Marcada</th></tr>${[...view.k].map((k,i)=>{const a=k=='X'?k:view.a[i];return `<tr style="${a==k?'':a=='-'?'':'background:#fdeaea'}"><td>${i+1}</td><td>${k=='X'?'Anulada':k}</td><td style="color:${k=='X'?'#889':a==k?'var(--ok)':a=='-'?'#889':'var(--er)'}">${k=='X'?'Anulada':a==k?'✓ Correta':a=='-'?'• Em branco':'✗ Errada'} ${k=='X'?'':`<button class="bt o" style="padding:2px 10px" onclick="cyc(${i})">${a=='-'?'—':a}</button>`}</td></tr>`}).join('')}</table><button class="bt big" onclick="mp='rd';go()">Voltar</button></div></div>`+nav();
+ if(mp=='mn')return mnV();if(mp=='ex')return `<div class="mw"><h3>Importar/Exportar</h3><div class="rc"><p><b>${S.res.length}</b> gabarito(s) lido(s) neste aparelho.</p><div class="w"><table>${S.res.map((r,i)=>`<tr><td>${esc(r.n||('ID '+(r.s||'?')))}</td><td>${sc(r)}/${r.k.length}</td><td><button class="bt o" style="padding:3px 9px" onclick="S.res.splice(${i},1);save();go()">✕</button></td></tr>`).reverse().join('')}</table></div>${pendH()}<b>Importar</b><label class="bt big" style="display:block;margin:6px 0;cursor:pointer">Importar ZIP<input type="file" accept=".zip" hidden onchange="imp(this.files[0]);this.value=''"></label><p class="mu">ZIP completo do computador: traz turmas, alunos e gabaritos (substitui os dados deste aparelho). ZIP de leituras: só adiciona resultados.</p><b>Exportar</b><button class="bt big" style="margin:6px 0" onclick="exp(1)">Exportar tudo</button><button class="bt o big" style="margin:6px 0" onclick="exp()">Exportar só gabaritos lidos</button><p class="mu">No computador, importe em Configurações → Importar ZIP.</p>${S.res.length?arm2('mx','Limpar leituras','S.res=[];save()'):''}<div id="ms" style="color:var(--er)"></div></div></div>`+nav();
+ return `<div class="mw" id="rd"><div style="margin-top:60px">${logo.replace('width="28" height="28"','width="90" height="90"')}</div><h1 style="font-size:40px;margin:6px 0">Aprender<b style="color:#3b8bff">+</b></h1><p>Seu desempenho,<br>nossa meta!</p><p class="mu">👤 ${esc(S.teacher)}</p><button class="bt big" onclick="cam()">Ler gabarito</button><button class="bt o big" style="color:#fff;border-color:#fff;margin-top:12px" onclick="mn={e:'',s:'',a:[]};mp='mn';go()">Inserir manualmente</button><p class="mu">${S.res.length} gabarito(s) lido(s) neste aparelho</p></div>`+nav()}
+const nav=()=>`<div class="nv"><div class="${mp!='ex'?'on':''}" onclick="stop();view=null;mp='rd';go()">⌂<br><small>Leitor</small></div><div class="${mp=='ex'?'on':''}" onclick="stop();mp='ex';go()">⇪<br><small>Importar/Exportar</small></div></div>`;
+function go(){document.body.className=mob?'m':'';$('#app').innerHTML=!S.teacher?welcome():mob?mView():dView()}
+go();
+</script></body></html>
