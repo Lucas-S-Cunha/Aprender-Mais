@@ -81,13 +81,12 @@ As tecnologias utilizadas no desenvolvimento da interface e das funcionalidades 
 
 ## 👥 Equipe de desenvolvimento
 
-- **Desenvolvedor(a):** Adicione seu nome aqui.
-- **Colaboradores:** Adicione os nomes dos participantes do projeto.
+- **Desenvolvedores e Colaboradores:** Samuel, Marco, Davi, Feliphy, Bruno, Antonio, Eduardo, Pedro.
 
 ## 📌 Status do projeto
 
-🚧 **Em desenvolvimento.**
+🚧 **Em desenvolvimento, mas parcialmente completo.**
 
 ## 📄 Licença
 
-Projeto desenvolvido com finalidade educacional. Caso seja adotada uma licença de distribuição, informe-a nesta seção.
+Projeto desenvolvido com finalidade educacional. Licença ainda não declarada.
