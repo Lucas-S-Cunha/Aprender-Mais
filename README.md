@@ -60,9 +60,9 @@ A página inicial reúne o acesso às principais áreas do sistema, como alunos 
 As tecnologias utilizadas no desenvolvimento da interface e das funcionalidades são:
 
 <p>
-  <img src="html5.png" alt="HTML5" height="78">
-  <img src="css3.png" alt="CSS3" height="78">
-  <img src="javascript.png" alt="JavaScript" height="78">
+  <img src="html.png" alt="HTML5" height="78">
+  <img src="css.png" alt="CSS3" height="78">
+  <img src="js.png" alt="JavaScript" height="78">
 </p>
 
 - **HTML5** — estrutura das páginas.
