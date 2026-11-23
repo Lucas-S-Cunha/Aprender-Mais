@@ -56,9 +56,8 @@ h1{margin:0 0 10px;font-size:27px;letter-spacing:-.5px}
 
 <!-- Firebase SDKs -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 // 1) Substitua os valores abaixo pela configuração do seu projeto Firebase.
 const firebaseConfig = {
   apiKey: "AIzaSyAjHsmmwYWuRSOuaG5ik8vRLm8O7JPJpSM",
@@ -69,7 +68,7 @@ const firebaseConfig = {
   appId: "1:132236892368:web:a45dac5f7e5cd87b83e6d5",
   measurementId: "G-B0H2TNJZVJ"
 };
-// 2) Caminho para o arquivo Aprender+ (deixe assim se estiver na mesma pasta).
+
 const APP_FILE = "./Aprender+.html";
 
 const statusEl = document.getElementById("status");
@@ -84,7 +83,8 @@ function showStatus(message, isError=false) {
 }
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const analytics = getAnalytics(app);
+  
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
