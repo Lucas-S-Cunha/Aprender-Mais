@@ -54,68 +54,91 @@ h1{margin:0 0 10px;font-size:27px;letter-spacing:-.5px}
   <iframe id="app-frame" title="Aplicativo Aprender+" src="about:blank"></iframe>
 </div>
 
-<!-- Firebase SDKs -->
+
 <script type="module">
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// 1) Substitua os valores abaixo pela configuração do seu projeto Firebase.
-const firebaseConfig = {
-  apiKey: "AIzaSyAjHsmmwYWuRSOuaG5ik8vRLm8O7JPJpSM",
-  authDomain: "aprendermais-4d2d5.firebaseapp.com",
-  projectId: "aprendermais-4d2d5",
-  storageBucket: "aprendermais-4d2d5.firebasestorage.app",
-  messagingSenderId: "132236892368",
-  appId: "1:132236892368:web:a45dac5f7e5cd87b83e6d5",
-  measurementId: "G-B0H2TNJZVJ"
-};
+  // feito por IA - correção dos imports e inicialização do Firebase
 
-const APP_FILE = "./Aprender+.html";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const statusEl = document.getElementById("status");
-const loginBtn = document.getElementById("google-login");
-const loginView = document.getElementById("login-view");
-const appShell = document.getElementById("app-shell");
-const frame = document.getElementById("app-frame");
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-function showStatus(message, isError=false) {
-  statusEl.textContent = message;
-  statusEl.classList.toggle("error", isError);
-}
+  // Configuração Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAjHsmmwYWuRSOuaG5ik8vRLm8O7JPJpSM",
+    authDomain: "aprendermais-4d2d5.firebaseapp.com",
+    projectId: "aprendermais-4d2d5",
+    storageBucket: "aprendermais-4d2d5.firebasestorage.app",
+    messagingSenderId: "132236892368",
+    appId: "1:132236892368:web:a45dac5f7e5cd87b83e6d5"
+  };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-  
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
+  // Inicialização
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-loginBtn.addEventListener("click", async () => {
-  loginBtn.disabled = true;
-  showStatus("Abrindo login Google…");
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    showStatus(error.message || "Não foi possível entrar. Verifique a configuração do Firebase.", true);
-  } finally {
-    loginBtn.disabled = false;
+  const APP_FILE = "./Aprender+.html";
+
+  const statusEl = document.getElementById("status");
+  const loginBtn = document.getElementById("google-login");
+  const loginView = document.getElementById("login-view");
+  const appShell = document.getElementById("app-shell");
+  const frame = document.getElementById("app-frame");
+
+  function showStatus(message, isError = false) {
+    statusEl.textContent = message;
+    statusEl.classList.toggle("error", isError);
   }
-});
 
-document.getElementById("logout").addEventListener("click", async () => {
-  await signOut(auth);
-  frame.src = "about:blank";
-});
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
 
-onAuthStateChanged(auth, user => {
-  if (user) {
-    loginView.style.display = "none";
-    appShell.style.display = "block";
-    if (frame.src.endsWith("about:blank")) frame.src = APP_FILE;
-  } else {
-    loginView.style.display = "block";
-    appShell.style.display = "none";
-    showStatus("");
-  }
-});
+  // Login Google
+  loginBtn.addEventListener("click", async () => {
+    loginBtn.disabled = true;
+    showStatus("Abrindo login Google…");
+
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Erro no login:", error);
+      showStatus(error.message || "Não foi possível entrar.", true);
+    } finally {
+      loginBtn.disabled = false;
+    }
+  });
+
+  // Logout
+  document.getElementById("logout").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      frame.src = "about:blank";
+    } catch (error) {
+      console.error("Erro ao sair:", error);
+    }
+  });
+
+  // Verifica autenticação
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginView.style.display = "none";
+      appShell.style.display = "block";
+
+      if (frame.src.endsWith("about:blank")) {
+        frame.src = APP_FILE;
+      }
+    } else {
+      loginView.style.display = "block";
+      appShell.style.display = "none";
+      frame.src = "about:blank";
+      showStatus("");
+    }
+  });
 </script>
 </body>
 </html>
